@@ -10,11 +10,25 @@ function colonize (option) {
     var lineLength = lineObject.text.length
 
     if (lineObject.text.charAt(lineLength - 1) !== ';' && !lineObject.isEmptyOrWhitespace) {
-      var insertionSuccess = editor.edit((editBuilder) => {
-        editBuilder.insert(new vscode.Position(lineIndex, lineLength), ';')
-      })
 
-      if (!insertionSuccess) return
+      var needAddParenthesis = lineObject.text.charAt(lineLength - 1) == '>'
+
+      if(needAddParenthesis)
+      {
+        var insertionSuccess = editor.edit((editBuilder) => {
+          editBuilder.insert(new vscode.Position(lineIndex, lineLength), '();')
+        })
+  
+        if (!insertionSuccess) return
+      }
+      else
+      {
+        var insertionSuccess = editor.edit((editBuilder) => {
+          editBuilder.insert(new vscode.Position(lineIndex, lineLength), ";")
+        })
+  
+        if (!insertionSuccess) return
+      }
     }
 
     if (option === 'hold') return
